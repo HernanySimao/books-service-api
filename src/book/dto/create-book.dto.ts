@@ -14,6 +14,5 @@ export class CreateBookDto {
   autor: string;
 
   @IsNotEmpty()
-  @IsString()
   code: number;
 }

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateBookDto } from '../dto/create-book.dto';
-import {Book} from "../entities/book.entity"
+import { Book } from "../entities/book.entity"
 import { UpdateBookDto } from '../dto/update-book.dto';
 
 @Injectable()
@@ -43,7 +43,7 @@ export class BookRepository {
 
 
   async update(code: number, updateBookDto: UpdateBookDto) {
-    const book = await  this.prisma.book.findUnique({
+    const book = await this.prisma.book.findUnique({
       where: {
         code
       }

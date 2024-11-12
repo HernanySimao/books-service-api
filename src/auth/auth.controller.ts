@@ -2,18 +2,20 @@ import { Controller, Post, Body, UnauthorizedException, UseGuards } from '@nestj
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { UsersRepository } from '../users/repositories/users.repository';
+import { CreateUsersDto } from '../users/dto/create-users.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private usersService: UsersService,
+    private user: UsersRepository,
   ) {
   }
 
   @Post('register')
-  async register(@Body() body: { email: string; password: string }) {
-    return this.usersService.createUser(body.email, body.password);
+  async register(@Body() createUsersDto: CreateUsersDto) {
+    return this.user.createUser(createUsersDto);
   }
 
   @Post('login')

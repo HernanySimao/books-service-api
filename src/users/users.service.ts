@@ -11,5 +11,9 @@ export class UsersService {
     return this.userRepository.getAll();
   }
 
+  findOne(id: string) {
+    return this.userRepository.findOne(id);
+  }
+
 }
 

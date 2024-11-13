@@ -10,7 +10,28 @@ export class UsersRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async getAll(): Promise<UsersEntity[]> {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        password: false,
+        role: true
+      }
+    });
+  }
+
+  async findOne(id: string ): Promise<UsersEntity> {
+    return this.prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        email: true,
+        role:true,
+        password: false
+      }
+    })
   }
 
   async findByEmail(email: string) {
@@ -25,6 +46,7 @@ export class UsersRepository {
       data: {
         email: createUserDto.email,
         password: hashedPassword,
+        role: createUserDto.role,
       },
     });
   }

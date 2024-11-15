@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import { UsersEntity } from '../entities/users.entity';
 import { CreateUsersDto } from '../dto/create-users.dto';
+import { UpdateUsersDto } from '../dto/update-users.dto';
 
 @Injectable()
 
@@ -20,7 +21,14 @@ export class UsersRepository {
     });
   }
 
-  async findOne(id: string ): Promise<UsersEntity> {
+  async findOne(id: any ): Promise<UsersEntity> {
+    const user = await this.prisma.user.findUnique({
+      where: id
+    })
+
+    if(!user){
+      throw new NotFoundException("User not found please try again");
+    }
     return this.prisma.user.findUnique({
       where: {
         id: id,
@@ -30,6 +38,36 @@ export class UsersRepository {
         email: true,
         role:true,
         password: false
+      }
+    })
+  }
+
+  async update(id: string, updateUsersdto: UpdateUsersDto): Promise<UpdateUsersDto> {
+    const user = await this.prisma.user.findUnique({
+      where: {id}
+    })
+
+    if(!user){
+      throw new NotFoundException("User not found please try again");
+    }
+    return this.prisma.user.update({
+      where: {
+        id
+      },
+      select: {
+        id: true,
+        email: true,
+        role:true,
+        password: false
+      },
+      data: updateUsersdto
+    })
+  }
+
+  async delete(id: string): Promise<UsersEntity> {
+    return this.prisma.user.delete({
+      where: {
+        id
       }
     })
   }

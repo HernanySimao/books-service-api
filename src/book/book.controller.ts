@@ -25,7 +25,7 @@ export class BookController {
     return this.bookService.create(createBookDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+
   @Get()
   findAll() {
     return this.bookService.findAll();
@@ -36,11 +36,13 @@ export class BookController {
     return this.bookService.findOne(+int);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
     return this.bookService.update(+id, updateBookDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   remove(@Param('id') id: string) {
